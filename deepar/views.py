@@ -105,3 +105,12 @@ def complete(request):
         delete_file(unedited)
 
     return render(request, 'complete.html')
+
+def retake(request): 
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        profile.experiment_one_retake_count += 1
+        profile.save()
+        print(profile.experiment_one_retake_count)
+    return HttpResponse('retake')
+    

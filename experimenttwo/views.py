@@ -2,6 +2,7 @@ import base64
 from datetime import date
 import json
 import os
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from deepar.utils import delete_file, upload_file_to_azure
@@ -11,14 +12,16 @@ from restaurant_review.models import Profile
 
 def camera(request):
     profile = Profile.objects.get(user=request.user)
-    if request.method == 'GET':
-        profile.experiment_two_day += 1
-        profile.experiment_two_last_photo_date = date.today()
-        profile.save()
+    # if request.method == 'GET':
+    #     profile.experiment_two_day += 1
+    #     profile.experiment_two_last_photo_date = date.today()
+    #     profile.save()
     
     if request.method == 'POST':
         #increment day and last photo taken variables 
-
+        profile.experiment_two_day += 1
+        profile.experiment_two_last_photo_date = date.today()
+        profile.save()
 
         isAR = bool(request.META.get('HTTP_X_IS_AR'))
         img_data = request.body[22:]
@@ -100,3 +103,12 @@ def finished(request):
             delete_file(unedited)
 
     return render(request, 'finished.html')
+
+# def retake(request): 
+#     if request.method == 'POST':
+#         profile = Profile.objects.get(user=request.user)
+#         profile.experiment_two_retake_count += 1
+#         profile.save()
+#         print(profile.experiment_one_retake_count)
+#     return HttpResponse('retake')
+    

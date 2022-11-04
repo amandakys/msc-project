@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.deepar, name='deepar'),
     path('filters/', views.filters, name='filters'),
     path ('select/', views.select, name='select'),
-    path('complete/', views.complete, name='complete')
+    path('complete/', views.complete, name='complete'),
+    path('retake/', views.retake, name='retake')
 ]
 

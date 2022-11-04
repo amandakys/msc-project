@@ -10,18 +10,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>   
         <style>
           .question {
-        background-color: rgba(255,255,255, 0.7);
-        position: fixed; 
-        top: 4.5rem; 
-        width: -webkit-fill-available;
-        display: flex; 
-        align-content: center;
-        justify-content: center;
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
-        border-radius: 5px;
-        margin: 0px 2em; 
-        z-index: 3;
+            background-color: rgba(255,255,255, 0.7);
+            position: fixed; 
+            top: 4.5rem; 
+            width: -webkit-fill-available;
+            display: flex; 
+            align-content: center;
+            justify-content: center;
+            border-radius: 5px;
+            margin: 0px 2em; 
+            z-index: 3;
+            padding: 0.5em;
+            padding-bottom: 0;
+            text-align: center;
       }
         </style>
 
@@ -47,7 +48,7 @@
       <main >    
         <div class="contents">
         {% if user.is_authenticated %}
-        {% if profile.tellIsAR %}<div class="question"> A beauty filter is being applied to this camera</div>{%endif%}
+        <div class="question"> <p>Please take a selfie you are happy with. You can retry as many times as you like</p>{% if profile.tellIsAR %}<p>A beauty filter is being applied to this camera</p>{%endif%}</div>
         {% block content %}{% endblock %}
         {% else %}
           <div style="padding-top: 4.5rem">

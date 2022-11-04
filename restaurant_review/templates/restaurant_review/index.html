@@ -156,7 +156,7 @@
         {% else %}
         <h4 style="padding-right: 1rem">Task</h4>
         {% endif %}
-        {% if profile.experiment_two_day != 0 %}<p> Day {{profile.experiment_two_day}} of 6 Complete</p>{% endif %}
+        {% if profile.experiment_two_day != 0 %}<p> Day {% widthratio profile.experiment_two_day 2 1 %} of 6 Complete</p>{% endif %}
       </div>
       <div class="letter">
         <div class="status">

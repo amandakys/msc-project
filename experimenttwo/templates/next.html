@@ -26,7 +26,7 @@
 
         {% else %}
 
-        <h1> Experiment 2: Day {{ profile.experiment_two_day }} of 6 Complete! </h1>
+        <h1> Experiment 2: Day {% widthratio profile.experiment_two_day 2 1 %} of 6 Complete! </h1>
         <!-- {% if profile.isPhotoTaken %} <h3> You've already taken a selfie today </h3> {% endif %} -->
         <h3> Please come back tomorrow to take another selfie </h3>
         {% endif %}

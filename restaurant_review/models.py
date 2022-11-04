@@ -27,13 +27,22 @@ class Review(models.Model):
 class Profile(models.Model):        
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     experiment_one = models.BooleanField(default=False) #is experiment one complete
-    experiment_one_result = models.BooleanField(default=True) #true = yes false = no 
+    experiment_one_result = models.BooleanField(default=True) #true = yes false = no
+    experiment_one_retake_count = models.IntegerField(default=0) #number of retakes 
+     
     experiment_two = models.BooleanField(default=False) #is experiment two complete
     experiment_two_day = models.IntegerField(default=0) #day cnt of photo taken
     experiment_two_last_photo_date = models.DateField(default=date(1999, 1, 1)) #date of last photo taken
     experiment_two_selection = models.CharField(default='', max_length=10)
     experiment_two_edited = models.CharField(default='', max_length=10)
     experiment_two_num_edited_selected = models.IntegerField(default=0)
+
+    experiment_two_retake_count_1 = models.IntegerField(default=0) #number of retakes on day 1
+    experiment_two_retake_count_2 = models.IntegerField(default=0) #number of retakes on day 2
+    experiment_two_retake_count_3 = models.IntegerField(default=0) #number of retakes on day 3
+    experiment_two_retake_count_4 = models.IntegerField(default=0) #number of retakes on day 4
+    experiment_two_retake_count_5 = models.IntegerField(default=0) #number of retakes on day 5
+    experiment_two_retake_count_6 = models.IntegerField(default=0) #number of retakes on day 6
 
     isARCamera = models.BooleanField(default=True) #show participant AR camera
     showARImage = models.BooleanField(default=True) #show participant AR image 
@@ -51,7 +60,7 @@ class Profile(models.Model):
     @property
     def isPhotoTaken(self):
         return date.today() == self.experiment_two_last_photo_date
-
+ 
     # @property 
     # def isComplete(self):
     #     return self.experiment_two_day >= 7

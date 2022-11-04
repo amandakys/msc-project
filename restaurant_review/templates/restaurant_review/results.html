@@ -15,6 +15,7 @@
             <th>Completed</th>
             <th>Selection</th>
             <th>Correct? </th>
+            <th>Retake Count</th>
 
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
                     <td>{% if usr.experiment_one %} YES {% else %} NO {% endif %}</td>
                     <td>{% if usr.experiment_one_result %} YES {% else %} NO {% endif %}</td>
                     <td>{% if usr.experiment_one_result == usr.showARImage %} YES {% else %} NO {% endif %}</td>
+                    <td>{{usr.experiment_one_retake_count}}</td>
                 </tr>
             {% endfor %}
         </tbody>
