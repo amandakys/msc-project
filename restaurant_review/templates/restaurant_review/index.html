@@ -74,113 +74,213 @@
   </style>
 {% endblock %}
 {% block content %}
+{% csrf_token %}
   <div class="container">
-    {% if not profile.experiment_two %}
+    {% if not profile.experiment_two%}
     <h1>Tasks</h1>
     <h4>Please complete the tasks in order</h4>
     {% else %}
-    <h1>Thank You!</h1>
-    <h2>You're all done</h2>
+
+
+      {% if profile.survey_two_isComplete %}
+      <h1>Thank You!</h1>
+      <h3>You're all done</h3>
+      <hr>
+      <h4>Study Debriefing: </h4>
+      <p>Thank you for taking the time to participate in my study. In addition to what you were told in the initial information sheet, this study was also investigating the impact of undisclosed AR beauty filters. For some of you, your selfie camera would have been modified to show an image that had a skin-blurring filter applied. We are looking to investigate how this might affect people's self-perception. </p>
+      {% else %}
+      <h1>Thank You!</h1>
+      <p id="comeback">Please come back to this page after completing Survey 2 for a short debriefing</p>
+      <div id="debrief" style="display: none">
+        <h3>You're all done</h3>
+        <hr>
+        <h4>Study Debriefing: </h4>
+        <p>Thank you for taking the time to participate in my study. In addition to what you were told in the initial information sheet, this study was also investigating the impact of undisclosed AR beauty filters. For some of you, your selfie camera would have been modified to show an image that had a skin-blurring filter applied. We are looking to investigate how this might affect people's self-perception. </p>
+    </div>
+      {% endif %}
+
     <hr>
     {% endif %}
 
     <div class="wrapper"> 
       <div class="letter">
         
-        <a href="{% url 'index' %}">
+        <a href="https://redcap.slms.ucl.ac.uk/surveys/?s=9FHN9T3NWDXH4RJW" onclick="hasConsent()">
           <h4>Consent Form</h4>
         </a>
       </div>
       <div class="letter">
         <div class="status">
-          <input type="checkbox"  />
-          {% if profile.experiment_one %} <h6>Complete</h6> {% else %} <h6> Not Complete</h6> {% endif %}
+          <input type="checkbox" id="consent-checkbox" onclick="return false" {% if profile.hasConsent %} checked {% endif %} />
+          <h6 id="consent-complete-text">{% if profile.hasConsent %} Complete {% else %} Not Complete{% endif %}</h6> 
     
         </div>
       </div>
 
-      <hr><hr>
+      <div class="wrapper"> 
+        <div class="letter">
+          <a href="https://redcap.slms.ucl.ac.uk/surveys/?s=3CAJWJMWXRC799J9" onclick="hasLottery()">
+            <h4 style="padding-right: 1rem; width: max-content">Lottery Signup</h4>
+          </a>
+        </div>
+          
+        </div>
+        <div class="letter">
+          <div class="status">
+            <input type="checkbox" id="lottery-checkbox" onclick="return false" {% if profile.hasLottery %} checked {% endif %} />
+            <h6 id="lottery-complete-text">{% if profile.hasLottery %} Complete {% else %} Not Complete (optional) {% endif %}</h6> 
       
-      <div class="letter">
-          <h3>Experiment 1</h3>
+          </div>
+        </div>
       </div>
-      <div class="letter">
-      </div>
+      <p>If you'd like to sign up for the £10 lottery for participating in Experiment 1, please fill out this form</p>
 
-      <div class="letter">
-        {% if not profile.experiment_one %} 
-        <a href="{% url 'deepar' %}">
-          <h4>Task</h4>
-        </a>
-        {% else %}
-          <h4>Task</h4>
-        {% endif %}
-      </div>
-      <div class="letter">
-        <div class="status">
-          <input type="checkbox" onclick="return false" {% if profile.experiment_one %} checked {% endif %} />
-          {% if profile.experiment_one %} <h6>Complete</h6> {% else %} <h6> Not Complete</h6> {% endif %}
-    
+      <hr>
+      <div class="wrapper"> 
+
+        <div class="letter">
+            <h3>Experiment 1</h3>
+        </div>
+        <div class="letter">
+        </div>
+
+        <div class="letter">
+          {% if not profile.experiment_one %} 
+          <a href="{% url 'deepar' %}">
+            <h4>Task</h4>
+          </a>
+          {% else %}
+            <h4>Task</h4>
+          {% endif %}
+        </div>
+        <div class="letter">
+          <div class="status">
+            <input type="checkbox" onclick="return false" {% if profile.experiment_one %} checked {% endif %} />
+            {% if profile.experiment_one %} <h6>Complete</h6> {% else %} <h6> Not Complete</h6> {% endif %}
+      
+          </div>
         </div>
       </div>
 
-      <hr><hr>
-
-      <div class="letter">
-          <h3>Experiment 2</h3>
+      <hr>
+      <div class="wrapper"> 
+        <div class="letter">
+            <h3>Experiment 2</h3>
+        </div>
+        <div class="letter">
+        </div>
       </div>
-      <div class="letter">
-      </div>
-
-      <div class="letter">
-        
-        <a href="{% url 'index' %}">
-          <h4>Survey 1</h4>
-        </a>
-      </div>
-      <div class="letter">
-        <div class="status">
-          <input type="checkbox"  />
-          {% if profile.experiment_one %} <h6>Complete</h6> {% else %} <h6> Not Complete</h6> {% endif %}
-    
+      <div class="wrapper"> 
+        <div class="letter">
+          
+          <a href="https://redcap.slms.ucl.ac.uk/surveys/?s=RP8YNRNW9RWAKXFJ" onclick="surveyOne()">
+            <h4>Survey 1</h4>
+          </a>
+        </div>
+        <div class="letter">
+          <div class="status">
+            <input id="one-checkbox" onclick="return false"  type="checkbox" {% if profile.survey_one_isComplete %} checked {% endif %} />
+            <h6 id="one-complete-text">{% if profile.survey_one_isComplete %} Complete {% else %} Not Complete{% endif %}</h6> 
+      
+          </div>
         </div>
       </div>
 
-      <div class="letter">
-        
-        {% if not profile.experiment_two %} 
-        <a href="{% if profile.isPhotoTaken %} {% url 'next' %} {% else %} {% url 'camera' %} {% endif %}"><h4 style="padding-right: 1rem">Task</h4></a>
-        <!-- <a href="{% url 'camera' %}">
+      <div class="wrapper"> 
+        <div class="letter">
+          
+          {% if not profile.experiment_two %} 
+          <a href="{% if profile.isPhotoTaken %} {% url 'next' %} {% else %} {% url 'camera' %} {% endif %}"><h4 style="padding-right: 1rem">Task</h4></a>
+          {% else %}
           <h4 style="padding-right: 1rem">Task</h4>
-        </a> -->
-        {% else %}
-        <h4 style="padding-right: 1rem">Task</h4>
-        {% endif %}
-        {% if profile.experiment_two_day != 0 %}<p> Day {% widthratio profile.experiment_two_day 2 1 %} of 6 Complete</p>{% endif %}
-      </div>
-      <div class="letter">
-        <div class="status">
-          <input type="checkbox" onclick="return false" {% if profile.experiment_two %} checked {% endif %}/>
-          {% if profile.experiment_two %} <h6>Complete</h6> {% else %} <h6> Not Complete</h6> {% endif %}
-    
+          {% endif %}
+          {% if profile.experiment_two_day != 0 %}<p> Day {% widthratio profile.experiment_two_day 2 1 %} of 6 Complete</p>{% endif %}
+        </div>
+        <div class="letter">
+          <div class="status">
+            <input type="checkbox" onclick="return false" {% if profile.experiment_two %} checked {% endif %}/>
+            <h6>{% if profile.experiment_two %} Complete {% else %} Not Complete {% endif %}</h6> 
+      
+          </div>
         </div>
       </div>
 
-      <div class="letter">
-        
-        <a href="{% url 'index' %}">
-          <h4>Survey 2</h4>
-        </a>
-      </div>
-      <div class="letter">
-        <div class="status">
-          <input type="checkbox"  />
-          {% if profile.experiment_one %} <h6>Complete</h6> {% else %} <h6> Not Complete</h6> {% endif %}
-    
+      <div class="wrapper"> 
+        <div class="letter">
+          
+          <a href="https://redcap.slms.ucl.ac.uk/surveys/?s=3TWCPWE3HPHAY9YT" onclick="surveyTwo()">
+            <h4>Survey 2</h4>
+          </a>
+        </div>
+        <div class="letter">
+          <div class="status">
+            <input type="checkbox" id="two-checkbox" onclick="return false" {% if profile.survey_two_isComplete %} checked {% endif %} />
+            <h6 id="two-complete-text">{% if profile.survey_one_isComplete %} Complete {% else %} Not Complete{% endif %}</h6> 
+          </div>
         </div>
       </div>
 
     </div>
     
   </div>
+
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+  <script type="text/javascript">
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    function hasConsent() {
+      console.log('consent')
+      fetch('{{ request.path }}consent/', {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken,},
+      })
+      .then((response) => {
+        document.getElementById('consent-checkbox').checked = true;
+        document.getElementById('consent-complete-text').innerText = 'Complete';
+
+      })
+    }
+
+    function hasLottery() {
+      console.log('consent')
+      fetch('{{ request.path }}lottery/', {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken,},
+      })
+      .then((response) => {
+        document.getElementById('lottery-checkbox').checked = true;
+        document.getElementById('lottery-complete-text').innerText = 'Complete';
+
+      })
+    }
+
+    function surveyOne() {
+      fetch('{{ request.path }}surveyone/', {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken,},
+      })
+      .then((response) => {
+        document.getElementById('one-checkbox').checked = true;
+        document.getElementById('one-complete-text').innerText = 'Complete'
+
+      })
+    }
+
+    function surveyTwo() {
+      fetch('{{ request.path }}surveytwo/', {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken,},
+      })
+      .then((response) => {
+        document.getElementById('two-checkbox').checked = true;
+        document.getElementById('two-complete-text').innerText = 'Complete';
+        document.getElementById('debrief').style.display = 'block';
+        document.getElementById('comeback').style.display = 'none';
+
+      })
+    }
+
+  </script>
+  
 {% endblock %}

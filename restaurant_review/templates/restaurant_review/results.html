@@ -1,5 +1,4 @@
 {% extends "restaurant_review/base.html" %}
-<block
 {% block content %}
 <div class="container" style="padding-top: 4.5rem">
     {% if user.is_superuser %}
@@ -44,6 +43,7 @@
             <th>Edited Images</th>
             <th>Selected Images</th>
             <th>Num Edited Selected</th>
+            <th>Retake Count</th>
         </thead>
         <tbody>
             {% for usr in all_profiles %}
@@ -55,6 +55,7 @@
                     <td>{{usr.experiment_two_edited}}</td>
                     <td>{{usr.experiment_two_selection}}</td>
                     <td>{{usr.experiment_two_num_edited_selected}}</td>
+                    <td>{{usr.experiment_two_retake_count_1}}, {{usr.experiment_two_retake_count_2}}, {{usr.experiment_two_retake_count_3}}, {{usr.experiment_two_retake_count_4}}, {{usr.experiment_two_retake_count_5}}, {{usr.experiment_two_retake_count_6}}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -67,7 +68,6 @@
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript">
     function calculateResults() {
-        console.log(all, 'all')
         const edited = "{{user.experiment_two_edited}}"
         const selected = "{{user.experiment_two_selected}}"
         console.log(edited, edited)

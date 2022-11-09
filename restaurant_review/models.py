@@ -48,6 +48,12 @@ class Profile(models.Model):
     showARImage = models.BooleanField(default=True) #show participant AR image 
     tellIsAR = models.BooleanField(default=False) #tell participant camera is AR 
 
+    hasConsent = models.BooleanField(default=False) #participant has filled in consent form
+    survey_one_isComplete = models.BooleanField(default=False) #participant has filled in survey one
+    survey_two_isComplete = models.BooleanField(default=False) #participant has filled in survey two 
+    hasLottery = models.BooleanField(default=False) #participant has signed up for lottery 
+
+
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:

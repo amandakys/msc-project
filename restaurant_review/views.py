@@ -18,6 +18,9 @@ def index(request):
         # profile.experiment_two_day = 0
         # profile.experiment_two_last_photo_date = date(1999,1,1)
         # profile.save()
+
+        # profile.survey_two_isComplete = False
+        # profile.save()
         return render(request, 'restaurant_review/index.html', {'profile': profile})
     else: 
         return redirect('/account/login/')
@@ -30,6 +33,30 @@ def results(request):
     return render(request, 'restaurant_review/results.html', {'all_profiles': profiles})
 
     # return render(request, 'restaurant_review/results.html', {'all_users': users, 'all_profiles': profiles})
+
+def consent(request):
+    profile = Profile.objects.get(user=request.user)
+    profile.hasConsent = True
+    profile.save()
+    return render(request, 'restaurant_review/index.html', {'profile': profile})
+
+def lottery(request):
+    profile = Profile.objects.get(user=request.user)
+    profile.hasLottery = True
+    profile.save()
+    return render(request, 'restaurant_review/index.html', {'profile': profile})
+
+def surveyOne(request):
+    profile = Profile.objects.get(user=request.user)
+    profile.survey_one_isComplete = True
+    profile.save()
+    return render(request, 'restaurant_review/index.html', {'profile': profile})
+
+def surveyTwo(request):
+    profile = Profile.objects.get(user=request.user)
+    profile.survey_two_isComplete = True
+    profile.save()
+    return render(request, 'restaurant_review/index.html', {'profile': profile})
 
 
 

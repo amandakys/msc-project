@@ -63,6 +63,11 @@
           let buttons = document.getElementById('buttons')
           buttons.style.display = "none";
 
+          fetch('{{ request.path }}retake/', {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken,},
+        })
+
           deepAR.resume(); 
           noAR.resume(); 
       }

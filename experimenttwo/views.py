@@ -1,6 +1,7 @@
 import base64
 from datetime import date
 import json
+import math
 import os
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -37,7 +38,9 @@ def camera(request):
 
         # Create a file in the local data directory to upload and download
         # today = date.today().strftime("%d-%m-%Y")
-        today = 'day' + str(profile.experiment_two_day)
+        day = math.ceil(profile.experiment_two_day/2)
+        print('Day' + str(day))
+        today = 'day' + str(day)
         ar_file_name = today + "-edited.png"
         nar_file_name = today + "-unedited.png"
 
@@ -67,7 +70,7 @@ def camera(request):
 def next(request):
     # if request.method == 'GET': 
     profile = Profile.objects.get(user=request.user)
-    if profile.experiment_two_day == 6: 
+    if profile.experiment_two_day >= 11: 
         return redirect('select_three')
 
     # profile = Profile.objects.get(user=request.user)
@@ -104,11 +107,37 @@ def finished(request):
 
     return render(request, 'finished.html')
 
-# def retake(request): 
-#     if request.method == 'POST':
-#         profile = Profile.objects.get(user=request.user)
-#         profile.experiment_two_retake_count += 1
-#         profile.save()
-#         print(profile.experiment_one_retake_count)
-#     return HttpResponse('retake')
+def retake(request): 
+    if request.method == 'POST':
+        profile = Profile.objects.get(user=request.user)
+        currentDay = profile.experiment_two_day/2 + 1
+
+        if currentDay == 1:
+            profile.experiment_two_retake_count_1 += 1
+            print('Day 1')
+            print(profile.experiment_two_retake_count_1)
+        elif currentDay == 2: 
+            profile.experiment_two_retake_count_2 += 1
+            print('Day 2')
+            print(profile.experiment_two_retake_count_2)
+        elif currentDay == 3: 
+            profile.experiment_two_retake_count_3 += 1
+            print('Day 3')
+            print(profile.experiment_two_retake_count_3)
+        elif currentDay == 4: 
+            profile.experiment_two_retake_count_4 += 1
+            print('Day 4')
+            print(profile.experiment_two_retake_count_4)
+        elif currentDay == 5: 
+            profile.experiment_two_retake_count_5 += 1
+            print('Day 5')
+            print(profile.experiment_two_retake_count_5)
+        elif currentDay == 6: 
+            profile.experiment_two_retake_count_6 += 1
+            print('Day 6')
+            print(profile.experiment_two_retake_count_6)
+            
+        profile.save()
+        
+    return HttpResponse('retake')
     
