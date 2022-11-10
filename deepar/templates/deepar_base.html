@@ -14,7 +14,6 @@
             position: fixed; 
             top: 4.5rem; 
             width: -webkit-fill-available;
-            display: flex; 
             align-content: center;
             justify-content: center;
             border-radius: 5px;
@@ -48,7 +47,10 @@
       <main >    
         <div class="contents">
         {% if user.is_authenticated %}
-        <div class="question"> <p>Please take a selfie you are happy with. You can retry as many times as you like</p>{% if profile.tellIsAR %}<p>A beauty filter is being applied to this camera</p>{%endif%}</div>
+        <div class="question"> 
+          <p style="margin-bottom: 0" >Please take a selfie you are happy with. You can retry as many times as you like.</p>
+          {% if profile.tellIsAR %}<p style="margin-bottom: 0.5em"><i>A beauty filter is being applied to this camera</i></p>{%endif%}
+        </div>
         {% block content %}{% endblock %}
         {% else %}
           <div style="padding-top: 4.5rem">
