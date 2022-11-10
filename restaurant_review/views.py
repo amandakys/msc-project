@@ -28,7 +28,7 @@ def index(request):
 def results(request):
     # User = get_user_model()
     # users = User.objects.all()
-    profiles = Profile.objects.all()
+    profiles = Profile.objects.all().order_by('user__date_joined')
     # print(User.objects.values())
     return render(request, 'restaurant_review/results.html', {'all_profiles': profiles})
 

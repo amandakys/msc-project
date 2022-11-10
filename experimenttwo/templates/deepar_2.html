@@ -14,8 +14,8 @@
 {% csrf_token %}
 <div style="display: flex">
 
-  <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
-  <canvas style="display: none" class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
+  <canvas {% if not profile.isARCamera %} style="visibility: hidden" {%endif%} class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
+  <canvas {% if profile.isARCamera %} style="visibility: hidden" {%endif%} style="display: none" class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
 </div>
 
   <button id="photo-btn" onclick="takePhoto()">Take photo</button>
