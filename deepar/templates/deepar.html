@@ -154,8 +154,8 @@
 {% url 'camera' as experimenttwo %}
 
 <div style="display: flex">
-    <canvas {% if not profile.isARCamera %} style="visibility: hidden" {%endif%} class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
-    <canvas {% if profile.isARCamera %} style="visibility: hidden" {%endif%} class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
+    <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <canvas class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
 </div>
 
 
