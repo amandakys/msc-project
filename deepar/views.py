@@ -47,22 +47,22 @@ def deepar(request):
         nar_file_name = "unedited.png"
 
         if isAR: 
-            if not os.path.isfile(os.path.abspath(local_path + '/' + ar_file_name)):
+            # if not os.path.isfile(os.path.abspath(local_path + '/' + ar_file_name)):
                 with open(os.path.abspath(local_path + '/' + ar_file_name), 'wb') as f: 
                     f.write(base64.decodebytes(img_data)) 
                     print("wrote to " + ar_file_name)
                     upload_file_to_azure(user + '/experimentone/' + ar_file_name)
 
-            else :
-                print (ar_file_name + ' already exists')
+            # else :
+            #     print (ar_file_name + ' already exists')
         else: 
-            if not os.path.isfile(os.path.abspath(local_path + '/' + nar_file_name)):
+            # if not os.path.isfile(os.path.abspath(local_path + '/' + nar_file_name)):
                 with open(os.path.abspath(local_path + '/' + nar_file_name), 'wb') as f: 
                     f.write(base64.decodebytes(img_data)) 
                     print("wrote to " + nar_file_name)
                     upload_file_to_azure(user + '/experimentone/' + nar_file_name)
-            else :
-                print (nar_file_name + ' already exists')
+            # else :
+            #     print (nar_file_name + ' already exists')
         
         #Clean up
         # os.remove(upload_file_path)
