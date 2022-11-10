@@ -4,7 +4,7 @@
 
 {% block content %}
   <h2>Sign up</h2>
-  <p>To maintain your anonymity, please <b>DO NOT</b> use your name as your username</p>
+  <p>To maintain your anonymity, please <b>DO NOT</b> use your name as your username. We recommend your initials.</p>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
