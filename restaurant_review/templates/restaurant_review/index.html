@@ -79,6 +79,7 @@
     {% if not profile.experiment_two%}
     <h1>Tasks</h1>
     <h4>Please complete the tasks in order</h4>
+    <h3>Please complete the experiment tasks using a smartphone</h3>
     {% else %}
 
 
@@ -147,7 +148,7 @@
         <div class="letter">
           {% if not profile.experiment_one %} 
           <a href="{% url 'deepar' %}">
-            <h4>Task</h4>
+            <h4>Task (smartphone only)</h4>
           </a>
           {% else %}
             <h4>Task</h4>
@@ -190,7 +191,7 @@
         <div class="letter">
           
           {% if not profile.experiment_two %} 
-          <a href="{% if profile.isPhotoTaken %} {% url 'next' %} {% else %} {% url 'camera' %} {% endif %}"><h4 style="padding-right: 1rem">Task</h4></a>
+          <a href="{% if profile.isPhotoTaken %} {% url 'next' %} {% else %} {% url 'camera' %} {% endif %}"><h4 style="padding-right: 1rem">Task (smartphone only)</h4></a>
           {% else %}
           <h4 style="padding-right: 1rem">Task</h4>
           {% endif %}
