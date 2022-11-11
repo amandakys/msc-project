@@ -1,0 +1,197 @@
+{% extends 'deepar_base.html' %}
+{% load static %}
+{% block head %}
+{{ block.super}}
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>    
+    
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+    <style>
+        
+#container {
+  width: 100%;
+  height: 100%;
+}
+
+/* #video {
+  display: none;
+} */
+
+#canvas {
+  width: 100%;
+  height: 100%;
+}
+    </style>
+{% endblock %}
+{% block content %}
+
+<!-- <video height="360" width="480" autoplay></video><br>
+<video height="360" width="480" autoplay></video><br>
+<video height="360" width="480" autoplay></video>
+
+<script>
+    var videos = document.querySelectorAll('video');
+
+    var errorCallback = function(e) {
+    // User rejected camera request. Handle appropriately.
+    };
+
+    // Ensure cross-browser functionality.
+    navigator.getUserMedia = navigator.getUserMedia ||
+    navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia ||
+    navigator.msGetUserMedia;
+
+    if (navigator.getUserMedia) {
+    navigator.getUserMedia({
+        audio: false,
+        video: true
+    }, function(stream) {
+        for (var i = 0; i < videos.length; i++) {
+        videos[i].src = window.URL.createObjectURL(stream);
+        }
+
+    }, errorCallback);
+    } else {
+    for (var i = 0; i < videos.length; i++) {
+        videos[i].src = 'errorVideo.webm'; // fallback.
+    }
+
+    }
+</script> -->
+
+<!-- 
+<video autoplay playsinline webkit-playsinline muted hidden id="videoelement"></video>
+<video autoplay playsinline webkit-playsinline muted hidden id="video2"></video>
+<div class="container">
+  <canvas id="canvaselement" width="1920" height="1080"></canvas> 
+</div>
+
+<div class="container">
+    <canvas id="canvas2" width="1920" height="1080"></canvas> 
+  </div>
+
+<script>
+    
+var videoelement = document.getElementById("videoelement");
+var video = document.getElementById("video2");
+var streamContraints = {
+    audio: true,
+    video: { width: 1920, height: 1080 },
+};
+var canvaselement = document.querySelector('#canvaselement');
+var ctx = canvaselement.getContext('2d', { alpha: false });
+var canvasInterval = null;
+var fps=60
+
+var canvas = document.querySelector('#canvas2');
+var ctx = canvas.getContext('2d', { alpha: false });
+
+
+if (videoelement) {
+    navigator.mediaDevices
+    .getUserMedia(streamContraints)
+    .then(gotStream)
+    .catch(function (e) {
+        if (confirm("An error with camera occured:(" + e.name + ") Do you want to reload?")) {
+            location.reload();
+        }
+    });
+}
+//if stream found 
+function gotStream(stream) {
+    videoelement.srcObject = stream 
+    videoelement.play()
+    
+    video.srcObject = stream 
+    video.play()
+}
+
+function drawImage(video) {
+    ctx.drawImage(video, 0, 0, canvaselement.width, canvaselement.height);
+}
+
+canvasInterval = window.setInterval(() => {
+    drawImage(videoelement);
+    drawImage(video)
+}, 1000 / fps);
+</script> -->
+
+<div id="container">
+    <video id="video" autoplay playsinline loop muted></video>
+    <video id="video1" autoplay playsinline loop muted></video>
+    <!-- <canvas id="canvas"></canvas>
+    <canvas id="canvas"></canvas> -->
+  </div>
+<script>
+
+var video = document.getElementById('video');
+var video1 = document.getElementById('video1');
+
+// var canvas = document.getElementById('canvas');
+// var context = canvas.getContext('2d');
+
+
+// function calculateSize(srcSize, dstSize) {
+
+// var canvasHeight = window.innerHeight;
+// var canvasWidth = window.innerWidth;
+
+// // desktop, the width of the canvas is 0.66 * window height and on mobile it's fullscreen
+// if (window.innerWidth > window.innerHeight) {
+// canvasWidth = Math.floor(window.innerHeight*0.66);
+// }
+
+// return {
+//     width: canvasWidth, 
+//     height: canvasHeight, 
+// }
+
+// canvas.width = canvasWidth;
+// canvas.height = canvasHeight;
+//   var srcRatio = srcSize.width / srcSize.height;
+//   var dstRatio = dstSize.width / dstSize.height;
+//   if (dstRatio > srcRatio) {
+//     return {
+//       width:  dstSize.height * srcRatio,
+//       height: dstSize.height
+//     };
+//   } else {
+//     return {
+//       width:  dstSize.width,
+//       height: dstSize.width / srcRatio
+//     };
+//   }
+// }
+
+// function renderFrame() {
+//   requestAnimationFrame(renderFrame);
+//   canvas.width = window.innerWidth;
+//   canvas.height = window.innerHeight;
+//   if (video.readyState === video.HAVE_ENOUGH_DATA) {
+//     var videoSize = { width: video.videoWidth, height: video.videoHeight };
+//     var canvasSize = { width: canvas.width, height: canvas.height };
+//     var renderSize = calculateSize(videoSize, canvasSize);
+//     var xOffset = (canvasSize.width - renderSize.width) / 2;
+//     context.drawImage(video, xOffset, 0, renderSize.width, renderSize.height);
+//   }
+// }
+
+if (navigator.mediaDevices.getUserMedia) {
+  var successCallback = function(stream) {
+    video.srcObject = stream;
+    video1.srcObject = stream;
+  };
+  var errorCallback = function(error) {
+    console.log(error);
+  };
+  navigator.mediaDevices.getUserMedia({
+    audio: false,
+    video: { facingMode: 'environment' }
+  }).then(successCallback, errorCallback);
+  requestAnimationFrame(renderFrame);
+}
+</script>
+{% endblock %}

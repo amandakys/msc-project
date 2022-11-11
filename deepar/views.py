@@ -21,7 +21,7 @@ def deepar(request):
     if request.method == 'GET':
         if request.user.is_authenticated: 
             profile = Profile.objects.get(user=request.user)
-            return render(request, 'deepar.html', {'profile': profile})
+            return render(request, 'canvas.html', {'profile': profile})
 
     if request.method == 'POST':
         # this works
