@@ -153,7 +153,7 @@
 {% url 'deepar' as experimentone %}
 {% url 'camera' as experimenttwo %}
 
-<div style="display: flex">
+<div style="display: grid">
     <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
     <canvas class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
 </div>
@@ -221,7 +221,7 @@
           noAR.pause();
       }
 
-      var canvasHeight = window.innerHeight;
+      var canvasHeight = window.innerHeight/2;
       var canvasWidth = window.innerWidth;
       
       // desktop, the width of the canvas is 0.66 * window height and on mobile it's fullscreen
