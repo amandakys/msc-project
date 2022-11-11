@@ -153,7 +153,7 @@
 {% url 'deepar' as experimentone %}
 {% url 'camera' as experimenttwo %}
 
-<div style="display: grid">
+<div style="display: flex">
     <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
     <canvas class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
 </div>
@@ -299,6 +299,8 @@
       };
 
       deepAR.downloadFaceTrackingModel("{% static 'lib/models/face/models-68-extreme.bin' %}");
+      
+      // deepAR.setOffscreenRenderingEnabled(true);
 
       // second canvas code
       let canvasUnedited = document.getElementById('deepar-canvas-unedited');
@@ -364,6 +366,8 @@
       };
 
       noAR.downloadFaceTrackingModel("{% static 'lib/models/face/models-68-extreme.bin' %}");
+      noAR.setOffscreenRenderingEnabled(true);
 
+      deepAR.setOffscreenRenderingEnabled(true);
     </script>
 {% endblock %}
