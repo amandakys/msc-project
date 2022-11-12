@@ -13,9 +13,11 @@
 #container {
   width: 100%;
   height: 100%;
+  display:grid;
 }
 
 #video {
+    display:none; 
     -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 
@@ -35,13 +37,33 @@ canvas.deepar {
           width: 500px;
           height: 500px; 
 }
+.taken{
+    height: 100px!important;
+    width: 100px!important;
+    transition: all 0.5s ease-in;
+    border: solid 3px white;
+    box-shadow: 0 5px 10px 0 rgba(0,0,0,0.2);
+    top: 20px;
+    right: 20px;
+    z-index: 2;
+}
+#camera--output{
+    height: 100%; 
+    width:100%;
+}
+
     </style>
 {% endblock %}
 {% block content %}
 
 <div id="container">
     <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
-    <!-- <video id="video" autoplay playsinline loop muted></video> -->
+    <canvas id="camera--sensor" oncontextmenu="event.preventDefault()"></canvas>
+    <video id="video" autoplay playsinline loop muted></video>
+    <button id="camera--trigger">Take a picture</button>
+    <!-- <img src="//:0" alt="" id="camera--output"> -->
+
+
 </div>
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
@@ -66,6 +88,29 @@ canvas.deepar {
 
 let canvas = document.getElementById('deepar-canvas');
 
+let cameraSensor = document.querySelector("#camera--sensor");
+let cameraTrigger = document.querySelector("#camera--trigger");
+let cameraOutput = document.querySelector("#camera--output");
+let cameraView = document.getElementById('video')
+
+cameraTrigger.onclick = function() {
+    cameraSensor.width = cameraView.videoWidth;
+    cameraSensor.height = cameraView.videoHeight;
+    cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
+    cameraOutput.src = cameraSensor.toDataURL("image/webp");
+    cameraOutput.classList.add("taken");
+};
+
+
+// let nonar = document.getElementById('non-ar-canvas');
+// nonar.width = window.innerWidth;
+// nonar.height = window.innerHeight;
+// let video = document.getElementById('video');
+
+// let ctx = canvas.getContext('2d');
+// ctx.drawImage( video, 0, 0, nonar.width, nonar.height );
+
+
 var deepAR = new DeepAR({ 
         licenseKey: '55faac40a80177491dc62380af87cf5cc0e498a7aa7cf61dad455e21edc69dbbc54a35fcbe53cf88',
         canvas: canvas,
@@ -88,9 +133,9 @@ var deepAR = new DeepAR({
 
           // or we can setup the video element externally and call deepAR.setVideoElement (see startExternalVideo function below)
 
-          deepAR.switchEffect(0, 'slot',  "{% static 'effects/Blue_Smooth_1_Soft_05_R217_G214_B229.deepar' %}" , function() {
-            // effect loaded
-          });
+        //   deepAR.switchEffect(0, 'slot',  "{% static 'effects/viking_helmet.deepar' %}" , function() {
+        //     // effect loaded
+        //   });
         }
         }
       });
@@ -127,8 +172,8 @@ var deepAR = new DeepAR({
         console.log('start')
         cleanupVideoObjects();
         // create video element
-        var video = document.createElement('video');
-        // var video = document.getElementById('video')
+        // var video = document.createElement('video');
+        var video = document.getElementById('video')
         video.muted = true;
         video.loop = true;
         video.controls = true;
@@ -172,6 +217,10 @@ var deepAR = new DeepAR({
           
         var loaderWrapper = document.getElementById('loader-wrapper');
         loaderWrapper.style.display = 'none';
+
+        deepAR.switchEffect(0, 'slot',  "{% static 'effects/viking_helmet.deepar' %}" , function() {
+            // effect loaded
+          });
       }
 
       function cleanupVideoObjects() {
