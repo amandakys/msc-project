@@ -15,183 +15,176 @@
   height: 100%;
 }
 
-/* #video {
-  display: none;
-} */
+#video {
+    -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+
+}
 
 #canvas {
   width: 100%;
   height: 100%;
 }
+
+canvas.deepar { 
+          border: 0px none; 
+          background-color: black; 
+          display: block; 
+          margin: auto; 
+          -webkit-tap-highlight-color: rgba(0,0,0,0);
+          width: 500px;
+          height: 500px; 
+}
     </style>
 {% endblock %}
 {% block content %}
 
-<!-- <video height="360" width="480" autoplay></video><br>
-<video height="360" width="480" autoplay></video><br>
-<video height="360" width="480" autoplay></video>
-
-<script>
-    var videos = document.querySelectorAll('video');
-
-    var errorCallback = function(e) {
-    // User rejected camera request. Handle appropriately.
-    };
-
-    // Ensure cross-browser functionality.
-    navigator.getUserMedia = navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia ||
-    navigator.msGetUserMedia;
-
-    if (navigator.getUserMedia) {
-    navigator.getUserMedia({
-        audio: false,
-        video: true
-    }, function(stream) {
-        for (var i = 0; i < videos.length; i++) {
-        videos[i].src = window.URL.createObjectURL(stream);
-        }
-
-    }, errorCallback);
-    } else {
-    for (var i = 0; i < videos.length; i++) {
-        videos[i].src = 'errorVideo.webm'; // fallback.
-    }
-
-    }
-</script> -->
-
-<!-- 
-<video autoplay playsinline webkit-playsinline muted hidden id="videoelement"></video>
-<video autoplay playsinline webkit-playsinline muted hidden id="video2"></video>
-<div class="container">
-  <canvas id="canvaselement" width="1920" height="1080"></canvas> 
-</div>
-
-<div class="container">
-    <canvas id="canvas2" width="1920" height="1080"></canvas> 
-  </div>
-
-<script>
-    
-var videoelement = document.getElementById("videoelement");
-var video = document.getElementById("video2");
-var streamContraints = {
-    audio: true,
-    video: { width: 1920, height: 1080 },
-};
-var canvaselement = document.querySelector('#canvaselement');
-var ctx = canvaselement.getContext('2d', { alpha: false });
-var canvasInterval = null;
-var fps=60
-
-var canvas = document.querySelector('#canvas2');
-var ctx = canvas.getContext('2d', { alpha: false });
-
-
-if (videoelement) {
-    navigator.mediaDevices
-    .getUserMedia(streamContraints)
-    .then(gotStream)
-    .catch(function (e) {
-        if (confirm("An error with camera occured:(" + e.name + ") Do you want to reload?")) {
-            location.reload();
-        }
-    });
-}
-//if stream found 
-function gotStream(stream) {
-    videoelement.srcObject = stream 
-    videoelement.play()
-    
-    video.srcObject = stream 
-    video.play()
-}
-
-function drawImage(video) {
-    ctx.drawImage(video, 0, 0, canvaselement.width, canvaselement.height);
-}
-
-canvasInterval = window.setInterval(() => {
-    drawImage(videoelement);
-    drawImage(video)
-}, 1000 / fps);
-</script> -->
-
 <div id="container">
-    <video id="video" autoplay playsinline loop muted></video>
-    <video id="video1" autoplay playsinline loop muted></video>
-    <!-- <canvas id="canvas"></canvas>
-    <canvas id="canvas"></canvas> -->
-  </div>
-<script>
+    <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <!-- <video id="video" autoplay playsinline loop muted></video> -->
+</div>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script type="text/javascript" src="{% static 'lib/js/deepar.js' %}"></script>
+<script type="text/javascript">
+// var video = document.getElementById('video');
 
-var video = document.getElementById('video');
-var video1 = document.getElementById('video1');
-
-// var canvas = document.getElementById('canvas');
-// var context = canvas.getContext('2d');
-
-
-// function calculateSize(srcSize, dstSize) {
-
-// var canvasHeight = window.innerHeight;
-// var canvasWidth = window.innerWidth;
-
-// // desktop, the width of the canvas is 0.66 * window height and on mobile it's fullscreen
-// if (window.innerWidth > window.innerHeight) {
-// canvasWidth = Math.floor(window.innerHeight*0.66);
-// }
-
-// return {
-//     width: canvasWidth, 
-//     height: canvasHeight, 
-// }
-
-// canvas.width = canvasWidth;
-// canvas.height = canvasHeight;
-//   var srcRatio = srcSize.width / srcSize.height;
-//   var dstRatio = dstSize.width / dstSize.height;
-//   if (dstRatio > srcRatio) {
-//     return {
-//       width:  dstSize.height * srcRatio,
-//       height: dstSize.height
-//     };
-//   } else {
-//     return {
-//       width:  dstSize.width,
-//       height: dstSize.width / srcRatio
-//     };
-//   }
-// }
-
-// function renderFrame() {
+// if (navigator.mediaDevices.getUserMedia) {
+//   var successCallback = function(stream) {
+//     video.srcObject = stream;
+//   };
+//   var errorCallback = function(error) {
+//     console.log(error);
+//   };
+//   navigator.mediaDevices.getUserMedia({
+//     audio: false,
+//     video: { facingMode: 'user' }
+//   }).then(successCallback, errorCallback);
 //   requestAnimationFrame(renderFrame);
-//   canvas.width = window.innerWidth;
-//   canvas.height = window.innerHeight;
-//   if (video.readyState === video.HAVE_ENOUGH_DATA) {
-//     var videoSize = { width: video.videoWidth, height: video.videoHeight };
-//     var canvasSize = { width: canvas.width, height: canvas.height };
-//     var renderSize = calculateSize(videoSize, canvasSize);
-//     var xOffset = (canvasSize.width - renderSize.width) / 2;
-//     context.drawImage(video, xOffset, 0, renderSize.width, renderSize.height);
-//   }
 // }
 
-if (navigator.mediaDevices.getUserMedia) {
-  var successCallback = function(stream) {
-    video.srcObject = stream;
-    video1.srcObject = stream;
-  };
-  var errorCallback = function(error) {
-    console.log(error);
-  };
-  navigator.mediaDevices.getUserMedia({
-    audio: false,
-    video: { facingMode: 'environment' }
-  }).then(successCallback, errorCallback);
-  requestAnimationFrame(renderFrame);
-}
+let canvas = document.getElementById('deepar-canvas');
+
+var deepAR = new DeepAR({ 
+        licenseKey: '55faac40a80177491dc62380af87cf5cc0e498a7aa7cf61dad455e21edc69dbbc54a35fcbe53cf88',
+        canvas: canvas,
+        segmentationConfig: {
+          modelPath: "{% static 'lib/models/segmentation/segmentation-160x160-opt.bin' %}"
+        },
+        footTrackingConfig: {
+          poseEstimationWasmPath: "{% static 'lib/wasm/libxzimgPoseEstimation.wasm' %}" ,
+          detectorPath: "{% static 'lib/models/foot/foot-detector-android.bin' %}" , // or ...-ios.bin
+          trackerPath: "{% static 'lib/models/foot/foot-tracker-android.bin' %}",  // or ...-ios.bin
+          objPath: "{% static 'lib/models/foot/foot-model.obj' %}",
+        },
+        deeparWasmPath: "{% static 'lib/wasm/deepar.wasm' %}",
+        callbacks: {
+          onInitialize: function() {
+          // start video immediately after the initalization, mirror = true
+        //   deepAR.startVideo(true);
+            // deepAR.setVideoElement(video, true)
+            startExternalVideo()
+
+          // or we can setup the video element externally and call deepAR.setVideoElement (see startExternalVideo function below)
+
+          deepAR.switchEffect(0, 'slot',  "{% static 'effects/Blue_Smooth_1_Soft_05_R217_G214_B229.deepar' %}" , function() {
+            // effect loaded
+          });
+        }
+        }
+      });
+
+      deepAR.callbacks.onCameraPermissionAsked = function() {
+        console.log('camera permission asked');
+      };
+
+      deepAR.callbacks.onCameraPermissionGranted = function() {
+        console.log('camera permission granted');
+      };
+
+      deepAR.callbacks.onCameraPermissionDenied = function() {
+        console.log('camera permission denied');
+      };
+
+      deepAR.callbacks.onScreenshotTaken = function(photo) {
+
+      };
+
+      deepAR.callbacks.onImageVisibilityChanged = function(visible) {
+        console.log('image visible', visible);
+      };
+
+      deepAR.callbacks.onFaceVisibilityChanged = function(visible) {
+        console.log('face visible', visible);
+      };
+
+      deepAR.downloadFaceTrackingModel("{% static 'lib/models/face/models-68-extreme.bin' %}");
+
+        // Store video objects for cleanup
+        var videoObjects = {};
+      function startExternalVideo() {
+        console.log('start')
+        cleanupVideoObjects();
+        // create video element
+        var video = document.createElement('video');
+        // var video = document.getElementById('video')
+        video.muted = true;
+        video.loop = true;
+        video.controls = true;
+        video.setAttribute('playsinline', 'playsinline');
+        video.style.width = '100%';
+        video.style.height = '100%';
+        video.style.transform = "scaleX(-1)";
+
+        // put it somewhere in the DOM
+        // var videoContainer = document.createElement('div');
+        var videoContainer = document.getElementById('container')
+        videoContainer.appendChild(video);
+        // videoContainer.style.width = '200px';
+        // videoContainer.style.height = '200px';
+        // videoContainer.style.position = 'absolute';
+        // videoContainer.style.top = '100px';
+        // videoContainer.style.left = '100px';
+        // videoContainer.style['z-index'] = '2';
+
+        // document.body.appendChild(videoContainer);
+  
+        // videoObjects.videoContainer = videoContainer;
+        // videoObjects.video = video;
+          
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }})
+        .then(function(stream) {
+          try {
+            video.srcObject = stream;
+          } catch (error) {
+            video.src = URL.createObjectURL(stream);
+          }
+          setTimeout(function() {
+            video.play();
+          }, 50);
+        }).catch(function(error) {
+            console.log('error in video play:', error);
+        });
+
+        // tell the DeepAR SDK about our new video element
+        deepAR.setVideoElement(video, true);
+          
+        var loaderWrapper = document.getElementById('loader-wrapper');
+        loaderWrapper.style.display = 'none';
+      }
+
+      function cleanupVideoObjects() {
+        if (videoObjects.length > 0){  
+            videoObjects.videoContainer.parentNode.removeChild(videoObjects.videoContainer);
+            videoObjects.videoContainer = null;
+            if (videoObjects.video.srcObject) {
+              //getUserMedia starts a stream, all tracks on all streams need to be stoppedbefore calling getUserMedia again
+              videoObjects.video.srcObject.getTracks().forEach(track => track.stop())
+            }
+            videoObjects.video.pause();
+            videoObjects = {};
+        }
+      }
 </script>
 {% endblock %}
