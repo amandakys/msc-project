@@ -76,61 +76,38 @@ Explore
         }
       }
 
-      .effect-carousel {
-        position: fixed !important;
-        width: 100%;
-        height: 100px;
-        bottom: 0px;
-        z-index: 999999;
-        background-color: rgba(255, 255, 255, 0.7);
+
+      #video {
+        /* display: none; */
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+        object-fit: cover;
       }
 
-      .thumb {
-        margin-top: 15px;
-        margin-bottom: 15px;
-        margin-right: auto;
-        margin-left: auto;
-        position: relative;
-        opacity: 0.8;
-        transition: all 300ms ease;
-        height: 70px;
+      #camera--sensor {
+        display: none;
       }
 
-      .slick-center .thumb {
-        -moz-transform: scale(1.3);
-        -ms-transform: scale(1.3);
-        -o-transform: scale(1.3);
-        -webkit-transform: scale(1.3);
-        color: #e67e22;
-        opacity: 1;
-        transform: scale(1.3);
-      }
-      .slick-slide {
-        width: 130px;
-      }
-
-      #recording-btn {
-        position: fixed;
-        top: 0px;
-        left: 0px;
-        width: 200px;
-        height: 80px;
-        z-index: 99999;
-      }
+      
 
     </style>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 
 {% endblock %}
 {% block content %}
+{% csrf_token %}
 
-    <button id="recording-btn">Start/stop video recording</button>
 
     <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
     <video id="video" autoplay playsinline loop muted></video>
     <canvas id="camera--sensor" oncontextmenu="event.preventDefault()"></canvas>
-    <button id="camera--trigger">Take a picture</button>
-
+    <button id="photo-btn" onclick="takePhoto()">Take photo</button>
+    <div id="buttons">
+      <button id="retake-btn" onclick="retakePhoto()">Retake photo</button>
+      <!-- <a href="{% if request.path == experimentone %} {% url 'select' %} {% elif profile.experiment_two_day >= 12 %} {% url 'select_three' %} {% else %}{% url 'next' %}{% endif %}"> -->
+        <button id="submit-btn" onclick="submitPhoto()">Submit photo</button>
+      <!-- </a> -->
+    </div>
 
 
     <div id="loader-wrapper">
@@ -142,18 +119,7 @@ Explore
     <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script type="text/javascript" src="{% static 'lib/js/deepar.js' %}"></script>
     <script type="text/javascript">
-
-        let cameraSensor = document.querySelector("#camera--sensor");
-        let cameraTrigger = document.querySelector("#camera--trigger");
-        let cameraView = document.getElementById('video')
-
-        cameraTrigger.onclick = function() {
-            cameraSensor.width = cameraView.videoWidth;
-            cameraSensor.height = cameraView.videoHeight;
-            cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
-            cameraOutput.src = cameraSensor.toDataURL("image/webp");
-            cameraOutput.classList.add("taken");
-        };
+      const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
       var canvasHeight = window.innerHeight;
       var canvasWidth = window.innerWidth;
@@ -163,9 +129,72 @@ Explore
         canvasWidth = Math.floor(window.innerHeight*0.66);
       }
 
+      function takePhoto() {
+        let video = document.getElementById('video');
+        video.pause();
+        deepAR.pause();
+        
+      }
+
+      function retakePhoto() {
+        let video = document.getElementById('video');
+        video.play();
+        deeparAR.resume(); 
+
+      }
+      function submitPhoto() {
+        let cameraSensor = document.querySelector("#camera--sensor");
+        cameraSensor.width = canvasWidth;
+        cameraSensor.height = canvasHeight;
+
+        let video = document.getElementById('video')
+        var hRatio = canvasWidth  / video.videoWidth   ;
+        var vRatio =  canvasHeight / video.videoHeight  ;
+        var ratio  = Math.max ( hRatio, vRatio );
+        var centerShift_x = ( canvasWidth - video.videoWidth*ratio ) / 2;
+        var centerShift_y = ( canvasHeight - video.videoHeight*ratio ) / 2;  
+        var ctx = cameraSensor.getContext('2d');
+        ctx.clearRect(0,0,canvasWidth, canvasHeight);
+        ctx.scale(-1, 1);
+        console.log(-centerShift_x, centerShift_y)
+        ctx.drawImage(video, 0,0, video.videoWidth, video.videoHeight,
+                            -centerShift_x,centerShift_y,video.videoWidth*ratio*-1, video.videoHeight*ratio);  
+
+        var photo = cameraSensor.toDataURL("image/png");
+        let myHeaders = new Headers({
+          'X-CSRFToken': csrftoken,
+          'Content-Type': 'application/upload',
+          'X-Is-AR': '' 
+        })
+        fetch('{{ request.path }}', {
+                method: 'POST',
+                mode: 'cors',
+                body: photo,
+                headers: myHeaders,
+        })
+        deepAR.takeScreenshot(); 
+        // cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
+        // cameraOutput.src = cameraSensor.toDataURL("image/webp");
+        // cameraOutput.classList.add("taken");
+      }
+        let cameraTrigger = document.querySelector("#camera--trigger");
+        let cameraView = document.getElementById('video')
+
+        // cameraTrigger.onclick = function() {
+        //     cameraSensor.width = cameraView.videoWidth;
+        //     cameraSensor.height = cameraView.videoHeight;
+        //     cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
+        //     cameraOutput.src = cameraSensor.toDataURL("image/webp");
+        //     cameraOutput.classList.add("taken");
+        // };
+
+
       let canvas = document.getElementById('deepar-canvas');
+      let video = document.getElementById('video');
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
+      video.width = canvasWidth;
+      video.height = canvasHeight;
 
       var deepAR = new DeepAR({ 
         licenseKey: '55faac40a80177491dc62380af87cf5cc0e498a7aa7cf61dad455e21edc69dbbc54a35fcbe53cf88',
@@ -209,8 +238,21 @@ Explore
       };
 
       deepAR.callbacks.onScreenshotTaken = function(photo) {
-        console.log('screenshot taken');
-      };
+
+        let myHeaders = new Headers({
+          'X-CSRFToken': csrftoken,
+          'Content-Type': 'application/upload',
+          'X-Is-AR': 'True' 
+        })
+
+        fetch('{{ request.path }}', {
+                method: 'POST',
+                mode: 'cors',
+                body: photo,
+                headers: myHeaders,
+        })
+
+        };
 
       deepAR.callbacks.onImageVisibilityChanged = function(visible) {
         console.log('image visible', visible);
@@ -227,21 +269,6 @@ Explore
 
       deepAR.downloadFaceTrackingModel("{% static 'lib/models/face/models-68-extreme.bin' %}");
 
-      let isRecording = false;
-      document.getElementById('recording-btn').onclick = function(e) {
-        if(!isRecording) {
-          isRecording = true;
-          deepAR.startVideoRecording();
-          console.log("Recording started!");
-        } else {
-          deepAR.finishVideoRecording(function(video) {
-            window.open(URL.createObjectURL(video), '_blank').focus();
-            console.log("Recording finished!");
-            isRecording = false;
-          });
-        }
-      };
-
       // Store video objects for cleanup
       var videoObjects = {};
 
@@ -251,10 +278,10 @@ Explore
         var video = document.getElementById('video');
         video.muted = true;
         video.loop = true;
-        video.controls = true;
+        // video.controls = true;
         video.setAttribute('playsinline', 'playsinline');
-        video.style.width = '100%';
-        video.style.height = '100%';
+        // video.style.width = '100%';
+        // video.style.height = '100%';
 
         // put it somewhere in the DOM
         // var videoContainer = document.createElement('div');
@@ -300,6 +327,42 @@ Explore
             }
             videoObjects.video.pause();
             videoObjects = {};
+        }
+      }
+
+      function calculateSize(srcSize, dstSize) {
+        var srcRatio = srcSize.width / srcSize.height;
+        var dstRatio = dstSize.width / dstSize.height;
+        if (dstRatio > srcRatio) {
+          return {
+            width:  dstSize.height * srcRatio,
+            height: dstSize.height
+          };
+        } else {
+          return {
+            width:  dstSize.width,
+            height: dstSize.width / srcRatio
+          };
+        }
+      }
+
+      function renderFrame() {
+        requestAnimationFrame(renderFrame);
+
+        var canvasHeight = window.innerHeight;
+        var canvasWidth = window.innerWidth;
+        
+        // desktop, the width of the canvas is 0.66 * window height and on mobile it's fullscreen
+        if (window.innerWidth > window.innerHeight) {
+          canvasWidth = Math.floor(window.innerHeight*0.66);
+        }
+        
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+          var videoSize = { width: video.videoWidth, height: video.videoHeight };
+          var canvasSize = { width: canvas.width, height: canvas.height };
+          var renderSize = calculateSize(videoSize, canvasSize);
+          var xOffset = (canvasSize.width - renderSize.width) / 2;
+          context.drawImage(video, xOffset, 0, renderSize.width, renderSize.height);
         }
       }
 
