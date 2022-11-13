@@ -126,8 +126,8 @@ Explore
 {% url 'deepar' as experimentone %}
 {% url 'camera' as experimenttwo %}
 
-    <canvas {% if not profile.isARCamera %} style="display:  none" {% endif %} class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
-    <video {% if profile.isARCamera %} style="display:  none"  {% endif %} id="video" autoplay playsinline loop muted></video>
+    <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <video id="video" autoplay playsinline loop muted></video>
     <canvas id="camera--sensor" oncontextmenu="event.preventDefault()"></canvas>
    
     <button id="photo-btn" onclick="takePhoto()">Take photo</button>
