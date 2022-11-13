@@ -133,9 +133,9 @@ Explore
     <button id="photo-btn" onclick="takePhoto()">Take photo</button>
     <div id="buttons">
       <button id="retake-btn" onclick="retakePhoto()">Retake photo</button>
-      <a href="{% if request.path == experimentone %} {% url 'select' %} {% elif profile.experiment_two_day >= 12 %} {% url 'select_three' %} {% else %}{% url 'next' %}{% endif %}">
+      <!-- <a href="{% if request.path == experimentone %} {% url 'select' %} {% elif profile.experiment_two_day >= 12 %} {% url 'select_three' %} {% else %}{% url 'next' %}{% endif %}"> -->
         <button id="submit-btn" onclick="submitPhoto()">Submit photo</button>
-      </a>
+      <!-- </a> -->
     </div>
 
 
