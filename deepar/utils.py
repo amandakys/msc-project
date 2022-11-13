@@ -43,6 +43,7 @@ def upload_file_to_azure(blob_name):
         # Upload the created file
         with open(upload_file_path, "rb") as data:
             blob_client.upload_blob(data)
+    
 
 def azure_has_blob(blob_name):
     blob_service_client = createBlobConnectionClient()
@@ -56,7 +57,7 @@ def azure_has_blob(blob_name):
     for blob in blob_list: 
         if blob.name == blob_name :
             hasBlob = True
-            print (file_name + ' already exists')
+            print (blob_name + ' already exists')
     
     return hasBlob
 

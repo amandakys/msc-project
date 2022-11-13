@@ -78,7 +78,6 @@ Explore
 
 
       #video {
-        /* display: none; */
         -webkit-transform: scaleX(-1);
         transform: scaleX(-1);
         object-fit: cover;
@@ -89,6 +88,34 @@ Explore
       }
 
       
+      #buttons {
+          position: fixed;
+          bottom: 1rem; 
+          left: 50%;
+          transform: translate(-50%, 0);
+
+          display: none;
+          grid-auto-flow: column;
+          column-gap: 10px;
+          justify-content: center;
+          z-index: 99999;
+      }
+
+      #submit-btn, #retake-btn {
+          width: 150px;
+          height: 80px;
+      }
+      
+      #photo-btn {
+          position: fixed;
+          bottom: 1rem;
+          left: 50%;
+          transform: translate(-50%, 0);
+          width: 200px;
+          height: 80px;
+          z-index: 99999;
+      }
+
 
     </style>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -96,17 +123,19 @@ Explore
 {% endblock %}
 {% block content %}
 {% csrf_token %}
+{% url 'deepar' as experimentone %}
+{% url 'camera' as experimenttwo %}
 
-
-    <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
-    <video id="video" autoplay playsinline loop muted></video>
+    <canvas {% if not profile.isARCamera %} style="display:  none" {% endif %} class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <video {% if profile.isARCamera %} style="display:  none"  {% endif %} id="video" autoplay playsinline loop muted></video>
     <canvas id="camera--sensor" oncontextmenu="event.preventDefault()"></canvas>
+   
     <button id="photo-btn" onclick="takePhoto()">Take photo</button>
     <div id="buttons">
       <button id="retake-btn" onclick="retakePhoto()">Retake photo</button>
-      <!-- <a href="{% if request.path == experimentone %} {% url 'select' %} {% elif profile.experiment_two_day >= 12 %} {% url 'select_three' %} {% else %}{% url 'next' %}{% endif %}"> -->
+      <a href="{% if request.path == experimentone %} {% url 'select' %} {% elif profile.experiment_two_day >= 12 %} {% url 'select_three' %} {% else %}{% url 'next' %}{% endif %}">
         <button id="submit-btn" onclick="submitPhoto()">Submit photo</button>
-      <!-- </a> -->
+      </a>
     </div>
 
 
@@ -134,14 +163,25 @@ Explore
         video.pause();
         deepAR.pause();
         
+        let take_photo = document.getElementById('photo-btn')
+        take_photo.style.display = 'none';
+
+        let buttons = document.getElementById('buttons')
+        buttons.style.display = "grid";
       }
 
       function retakePhoto() {
         let video = document.getElementById('video');
         video.play();
-        deeparAR.resume(); 
+        deepAR.resume(); 
 
+        let take_photo = document.getElementById('photo-btn')
+        take_photo.style.display = 'block';
+
+        let buttons = document.getElementById('buttons')
+        buttons.style.display = "none";
       }
+
       function submitPhoto() {
         let cameraSensor = document.querySelector("#camera--sensor");
         cameraSensor.width = canvasWidth;
@@ -167,12 +207,14 @@ Explore
           'X-Is-AR': '' 
         })
         fetch('{{ request.path }}', {
-                method: 'POST',
-                mode: 'cors',
-                body: photo,
-                headers: myHeaders,
+          method: 'POST',
+          mode: 'cors',
+          body: photo,
+          headers: myHeaders,
         })
+
         deepAR.takeScreenshot(); 
+
         // cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
         // cameraOutput.src = cameraSensor.toDataURL("image/webp");
         // cameraOutput.classList.add("taken");
