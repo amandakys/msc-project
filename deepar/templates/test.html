@@ -206,14 +206,19 @@ Explore
           'Content-Type': 'application/upload',
           'X-Is-AR': '' 
         })
+        
         fetch('{{ request.path }}', {
           method: 'POST',
           mode: 'cors',
           body: photo,
           headers: myHeaders,
         })
+        .then(() => {
+          deepAR.takeScreenshot(); 
+          // window.location.href = 'select/'
+        })
 
-        deepAR.takeScreenshot(); 
+
 
         // cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
         // cameraOutput.src = cameraSensor.toDataURL("image/webp");
@@ -292,6 +297,10 @@ Explore
                 mode: 'cors',
                 body: photo,
                 headers: myHeaders,
+        })
+        .then(() => { 
+            window.location.href = 'select/'
+
         })
 
         };
