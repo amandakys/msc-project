@@ -172,6 +172,12 @@ Explore
 
       function retakePhoto() {
         let video = document.getElementById('video');
+
+        fetch('{{ request.path }}retake/', {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrftoken,},
+        })
+
         video.play();
         deepAR.resume(); 
 
@@ -303,7 +309,15 @@ Explore
                 headers: myHeaders,
         })
         .then(() => { 
-            window.location.href = 'select/'
+            if("{{request.path}}" === "/experimentone/") {
+              window.location.href = 'select/'
+            } else if (parseInt('{{profile.experiment_two_day}}') >= 12) {
+              //experiment two day 6 
+              window.location.href = 'select/'
+            } else {
+              //experiment two 
+              window.location.href = 'next/'
+            }
 
         })
 
