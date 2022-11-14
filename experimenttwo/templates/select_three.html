@@ -98,7 +98,29 @@
 {% endblock %}
 {% block content %}
 {% csrf_token %}
+<script type="text/javascript">
+     
+    //  function waitAndReload(event) {
 
+    //     const originalSrc = event.target.src;
+
+    //     if (parseInt(event.target.getAttribute('data-retry'), 10) !== parseInt(event.target.getAttribute('data-max-retry'), 10)) {
+
+    //         event.target.setAttribute('data-retry', parseInt(event.target.getAttribute('data-retry'), 10) + 1);
+
+    //         // event.target.src = '/assets/images/placeholder.png';
+
+    //         setTimeout(function () {
+    //             event.target.src = originalSrc;
+    //         }, 500);
+    //     } else {
+    //         event.target.src = 'https://placeimg.com/200/300/animals';
+    //     }
+    //     }
+</script>
+<div id="loader-wrapper">
+  <span class="loader"></span></span>
+  </div>
 <div class="question-box" style="display: grid; grid-template-columns: auto;">
   <h5 style=" display: flex; align-items: center; justify-content: center; text-align:center">Select 3 pictures you feel best represent you </h5>
   <div style="display: flex; align-items:center; justify-content: center; margin-top: 5px">
@@ -111,12 +133,18 @@
   </div>
 </div>
    <div id="carousel" class="select-carousel">
+    <!-- <img id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src=""/>
     <img id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src=""/>
     <img id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src=""/>
     <img id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src=""/>
     <img id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src=""/>
-    <img id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src=""/>
-    <img id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src=""/>
+    <img id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src=""/> -->
+    <img id="image" src=""/>
+    <img id="image" src=""/>
+    <img id="image" src=""/>
+    <img id="image" src=""/>
+    <img id="image" src=""/>
+    <img id="image" src=""/>
   </div>
 
   <div id="select-box" onclick="handleClick()" class="select-box">
@@ -127,6 +155,22 @@
   <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
   <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <script type="text/javascript">
+
+  // const images= carousel.getElementsByTagName('img');
+
+  // function checkIfLoaded() {
+  //   if (images.map(i => i.src).includes("")) {
+  //     var loaderWrapper = document.getElementById('loader-wrapper');
+  //     loaderWrapper.style.display = 'none';
+  //   } else {
+  //     setTimeout(() => {}, 500)
+  //   }
+  // }
+  // while (images.map(i => i.src).includes("")) {
+  //   setTimeout(function () {
+  //             event.target.src = originalSrc;
+  //         }, 500);
+  // }
 
     const photos = [1,2,3,4,5,6]
     const half = photos.length/2; 
@@ -259,25 +303,6 @@
       })
 
       location.href = "{% url 'finished'%}"
-    }
-
-    
-    function waitAndReload(event) {
-
-      const originalSrc = event.target.src;
-
-      if (parseInt(event.target.getAttribute('data-retry'), 10) !== parseInt(event.target.getAttribute('data-max-retry'), 10)) {
-
-          event.target.setAttribute('data-retry', parseInt(event.target.getAttribute('data-retry'), 10) + 1);
-
-          // event.target.src = '/assets/images/placeholder.png';
-
-          setTimeout(function () {
-              event.target.src = originalSrc;
-          }, 500);
-      } else {
-          event.target.src = 'https://placeimg.com/200/300/animals';
-      }
     }
 
 
