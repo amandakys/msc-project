@@ -186,6 +186,7 @@ body {
             <div ><div class="thumb numberCircle">B15</div></div>
             <div ><div class="thumb numberCircle">B5</div></div>
             <div ><div class="thumb numberCircle">G5</div></div>
+            <div ><div class="thumb numberCircle">C</div></div>
         </div>
 
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -314,13 +315,17 @@ body {
             "{% static 'effects/Blue_Smooth_1_Soft_05_R217_G214_B229.deepar' %}",
             "{% static 'effects/Blue_Smooth_05_Soft_05_R217_G214_B229.deepar' %}",
             "{% static 'effects/Green_Smooth_05_Soft_05_R224_G229_B214.deepar' %}",
-
+            "",
 
           ];
 
 
         $('.effect-carousel').on('afterChange', function(event, slick, currentSlide){
+          if(effects[currentSlide] == "") {
+            deepAR.clearEffect('slot'); 
+          } 
           deepAR.switchEffect(0, 'slot', effects[currentSlide]);
+
         });
 
       });      

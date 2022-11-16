@@ -21,7 +21,7 @@ def deepar(request):
     if request.method == 'GET':
         if request.user.is_authenticated: 
             profile = Profile.objects.get(user=request.user)
-            return render(request, 'test.html', {'profile': profile})
+            return render(request, 'deepar.html', {'profile': profile})
 
     if request.method == 'POST':
         # this works
@@ -52,7 +52,7 @@ def deepar(request):
                     f.write(base64.decodebytes(img_data)) 
                     print("wrote to " + ar_file_name)
                     upload_file_to_azure(user + '/experimentone/' + ar_file_name)
-
+ 
             # else :
             #     print (ar_file_name + ' already exists')
         else: 

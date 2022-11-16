@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>    
-    
+    <title>deepar</title>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <!-- <link rel="stylesheet" type="text/css" href="{% static 'styles/index.css' %}"/> -->
     <style>
@@ -156,6 +156,7 @@
 <div style="display: grid">
     <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
     <canvas class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
+    <video style="display:none" id="video" autoplay playsinline loop muted></video>
 </div>
 
 
@@ -250,7 +251,8 @@
         callbacks: {
           onInitialize: function() {
           // start video immediately after the initalization, mirror = true
-          deepAR.startVideo(true);
+          // deepAR.startVideo(true);
+            startExternalVideo()
 
           // or we can setup the video element externally and call deepAR.setVideoElement (see startExternalVideo function below)
 
@@ -302,6 +304,52 @@
       
       // deepAR.setOffscreenRenderingEnabled(true);
 
+      
+      // Store video objects for cleanup
+      var videoObjects = {};
+
+      function startExternalVideo() {
+        cleanupVideoObjects();
+        // create video element
+        var video = document.getElementById('video');
+        video.muted = true;
+        video.loop = true;
+        // video.controls = true;
+        video.setAttribute('playsinline', 'playsinline');
+          
+        navigator.mediaDevices.getUserMedia({video: true}).then(function(stream) {
+          try {
+            video.srcObject = stream;
+          } catch (error) {
+            video.src = URL.createObjectURL(stream);
+          }
+          setTimeout(function() {
+            video.play();
+          }, 50);
+        }).catch(function(error) {
+            console.log('error in video play:', error);
+        });
+
+        // tell the DeepAR SDK about our new video element
+        deepAR.setVideoElement(video, true);
+          
+        var loaderWrapper = document.getElementById('loader-wrapper');
+        loaderWrapper.style.display = 'none';
+      }
+
+      function cleanupVideoObjects() {
+        if (videoObjects.length > 0){  
+            videoObjects.videoContainer.parentNode.removeChild(videoObjects.videoContainer);
+            videoObjects.videoContainer = null;
+            if (videoObjects.video.srcObject) {
+              //getUserMedia starts a stream, all tracks on all streams need to be stoppedbefore calling getUserMedia again
+              videoObjects.video.srcObject.getTracks().forEach(track => track.stop())
+            }
+            videoObjects.video.pause();
+            videoObjects = {};
+        }
+      }
+
       // second canvas code
       let canvasUnedited = document.getElementById('deepar-canvas-unedited');
       canvasUnedited.width = canvasWidth;
@@ -323,7 +371,8 @@
         callbacks: {
           onInitialize: function() {
           // start video immediately after the initalization, mirror = true
-          noAR.startVideo(true);
+          // noAR.startVideo(true);
+          startExternalVideoUnedited(); 
 
           }
         }
@@ -368,6 +417,33 @@
       noAR.downloadFaceTrackingModel("{% static 'lib/models/face/models-68-extreme.bin' %}");
       noAR.setOffscreenRenderingEnabled(true);
 
-      deepAR.setOffscreenRenderingEnabled(true);
+      function startExternalVideoUnedited() {
+        cleanupVideoObjects();
+        // create video element
+        var video = document.getElementById('video');
+        video.muted = true;
+        video.loop = true;
+        // video.controls = true;
+        video.setAttribute('playsinline', 'playsinline');
+          
+        navigator.mediaDevices.getUserMedia({video: true}).then(function(stream) {
+          try {
+            video.srcObject = stream;
+          } catch (error) {
+            video.src = URL.createObjectURL(stream);
+          }
+          setTimeout(function() {
+            video.play();
+          }, 50);
+        }).catch(function(error) {
+            console.log('error in video play:', error);
+        });
+
+        // tell the DeepAR SDK about our new video element
+        noAR.setVideoElement(video, true);
+          
+        var loaderWrapper = document.getElementById('loader-wrapper');
+        loaderWrapper.style.display = 'none';
+      }
     </script>
 {% endblock %}
