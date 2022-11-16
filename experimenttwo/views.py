@@ -65,7 +65,7 @@ def camera(request):
                 print (nar_file_name + ' already exists')
         
 
-    return render(request, 'test.html', {'profile': profile})
+    return render(request, 'deepar.html', {'profile': profile})
 
 def next(request):
     # if request.method == 'GET': 

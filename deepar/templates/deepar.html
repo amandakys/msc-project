@@ -154,9 +154,9 @@
 {% url 'deepar' as experimentone %}
 {% url 'camera' as experimenttwo %}
 
-<div style="display: grid">
-    <canvas class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
-    <canvas class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
+<div>
+    <canvas {% if not profile.isARCamera %} style="display: none" {% endif %}  class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <canvas {% if profile.isARCamera %} style="display: none" {% endif %}   class="deepar" id="deepar-canvas-unedited" oncontextmenu="event.preventDefault()"></canvas>
     <video style="display:none" id="video" autoplay playsinline loop muted></video>
 </div>
 
@@ -225,7 +225,7 @@
           noAR.pause();
       }
 
-      var canvasHeight = window.innerHeight/2;
+      var canvasHeight = window.innerHeight;
       var canvasWidth = window.innerWidth;
       
       // desktop, the width of the canvas is 0.66 * window height and on mobile it's fullscreen
