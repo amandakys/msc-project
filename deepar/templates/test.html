@@ -104,6 +104,11 @@
           z-index: 99999;
       }
 
+      #camera--sensor {
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+      }
+    
 
     </style>
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
@@ -114,9 +119,9 @@
 {% url 'deepar' as experimentone %}
 {% url 'camera' as experimenttwo %}
 
-    <canvas  class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <canvas {% if not profile.isARCamera %} style="display: none" {% endif %}  class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
     <canvas {% if profile.isARCamera %} style="display: none" {% endif %}  id="camera--sensor" oncontextmenu="event.preventDefault()"></canvas>
-    <video id="video" autoplay playsinline loop muted></video>
+    <video style="display:none" id="video" autoplay playsinline loop muted></video>
    
     <button id="photo-btn" onclick="takePhoto()">Take photo</button>
     <div id="buttons">

@@ -216,7 +216,7 @@
       console.log(images, 'images');
       for(var i = 0; i < images.length; i++ ) {
         images[i].src = `https://mastersproject.blob.core.windows.net/media/{{user.username}}/experimenttwo/day${imageOrder[i]}-${edited.includes(imageOrder[i]) ? 'edited': 'unedited'}.png`
-        // if(!edited.includes(imageOrder[i])) images[i].style.transform = "scaleX(-1)";
+        if(!edited.includes(imageOrder[i])) images[i].style.transform = "scaleX(-1)";
       }
     }
 
