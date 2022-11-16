@@ -211,8 +211,9 @@
                 headers: {'X-CSRFToken': csrftoken,},
         })
 
-          deepAR.resume(); 
-          noAR.resume(); 
+          // deepAR.resume(); 
+          // noAR.resume(); 
+          video.play(); 
       }
 
       function takePhoto() {
@@ -221,8 +222,9 @@
 
           let buttons = document.getElementById('buttons')
           buttons.style.display = "grid";
-          deepAR.pause(); 
-          noAR.pause();
+          // deepAR.pause(); 
+          // noAR.pause();
+          video.pause(); 
       }
 
       var canvasHeight = window.innerHeight;

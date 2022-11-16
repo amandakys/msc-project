@@ -63,7 +63,7 @@
             {% if profile.showARImage %}
             <img class="img-fluid" id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src="https://mastersproject.blob.core.windows.net/media/{{user.username}}/experimentone/edited.png"/>
             {% else %}
-            <img class="img-fluid" id="image" style="transform: scaleX(-1)" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src="https://mastersproject.blob.core.windows.net/media/{{user.username}}/experimentone/unedited.png"/>
+            <img class="img-fluid" id="image" onerror="waitAndReload(event)" data-max-retry="5" data-retry="0"  src="https://mastersproject.blob.core.windows.net/media/{{user.username}}/experimentone/unedited.png"/>
             {% endif %}
         </div>
       
