@@ -32,6 +32,7 @@
           height: 100%;
           background-color: #fff;
           text-align: center;
+          z-index:1000;
       }
 
       .loader {
@@ -163,10 +164,9 @@
     <button id="photo-btn" onclick="takePhoto()">Take photo</button>
     <div id="buttons">
       <button id="retake-btn" onclick="retakePhoto()">Retake photo</button>
-      <a href="{% if request.path == experimentone %} {% url 'select' %} {% elif profile.experiment_two_day >= 12 %} {% url 'select_three' %} {% else %}{% url 'next' %}{% endif %}">
         <button id="submit-btn" onclick="submitPhoto()">Submit photo</button>
-      </a>
     </div>
+
     <div id="loader-wrapper">
     <span class="loader"></span></span>
     </div>
@@ -191,7 +191,10 @@
 
       function submitPhoto() {
           deepAR.takeScreenshot(); 
-          noAR.takeScreenshot(); 
+          // noAR.takeScreenshot(); 
+          var loaderWrapper = document.getElementById('loader-wrapper');
+          loaderWrapper.style.display = 'inline-block';
+
       }
  
       function retakePhoto() {
@@ -288,6 +291,8 @@
                 mode: 'cors',
                 body: photo,
                 headers: myHeaders,
+        }).then(() => {
+          noAR.takeScreenshot(); 
         })
 
       };
@@ -402,6 +407,16 @@
                 mode: 'cors',
                 body: photo,
                 headers: myHeaders,
+        }).then(() => {
+          if("{{request.path}}" === "/experimentone/") {
+              window.location.href = 'select/'
+            } else if (parseInt('{{profile.experiment_two_day}}') >= 12) {
+              //experiment two day 6 
+              window.location.href = 'select/'
+            } else {
+              //experiment two 
+              window.location.href = 'next/'
+            }
         })
 
       };
@@ -415,7 +430,6 @@
       };
 
       noAR.downloadFaceTrackingModel("{% static 'lib/models/face/models-68-extreme.bin' %}");
-      noAR.setOffscreenRenderingEnabled(true);
 
       function startExternalVideoUnedited() {
         cleanupVideoObjects();
