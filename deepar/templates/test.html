@@ -75,10 +75,6 @@
         object-fit: cover;
       }
 
-      #camera--sensor {
-        /* display: none; */
-      }
-
       
       #buttons {
           position: fixed;
@@ -118,9 +114,9 @@
 {% url 'deepar' as experimentone %}
 {% url 'camera' as experimenttwo %}
 
-    <canvas {% if not profile.isARCamera %} style="display: none" {% endif %} class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
-    <video {% if profile.isARCamera %} style="display: none; pointer-events: none" {% endif %} style="pointer-events: none;" id="video" autoplay playsinline loop muted></video>
-    <canvas id="camera--sensor" oncontextmenu="event.preventDefault()"></canvas>
+    <canvas  class="deepar" id="deepar-canvas" oncontextmenu="event.preventDefault()"></canvas>
+    <canvas {% if profile.isARCamera %} style="display: none" {% endif %}  id="camera--sensor" oncontextmenu="event.preventDefault()"></canvas>
+    <video id="video" autoplay playsinline loop muted></video>
    
     <button id="photo-btn" onclick="takePhoto()">Take photo</button>
     <div id="buttons">
@@ -149,6 +145,16 @@
       if (window.innerWidth > window.innerHeight) {
         canvasWidth = Math.floor(window.innerHeight*0.66);
       }
+
+      let canvas = document.getElementById('deepar-canvas');
+      let unedited = document.getElementById('camera--sensor');
+      let video = document.getElementById('video');
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+      video.width = canvasWidth;
+      video.height = canvasHeight;
+      unedited.width = canvasWidth; 
+      unedited.height = canvasHeight;
 
       function takePhoto() {
         let video = document.getElementById('video');
@@ -182,21 +188,21 @@
 
       function submitPhoto() {
         let cameraSensor = document.querySelector("#camera--sensor");
-        cameraSensor.width = canvasWidth;
-        cameraSensor.height = canvasHeight;
+        // cameraSensor.width = canvasWidth;
+        // cameraSensor.height = canvasHeight;
 
-        let video = document.getElementById('video')
-        var hRatio = canvasWidth  / video.videoWidth   ;
-        var vRatio =  canvasHeight / video.videoHeight  ;
-        var ratio  = Math.max ( hRatio, vRatio );
-        var centerShift_x = ( canvasWidth - video.videoWidth*ratio ) / 2;
-        var centerShift_y = ( canvasHeight - video.videoHeight*ratio ) / 2;  
-        var ctx = cameraSensor.getContext('2d');
-        ctx.clearRect(0,0,canvasWidth, canvasHeight);
-        ctx.scale(-1, 1);
-        console.log(-centerShift_x, centerShift_y)
-        ctx.drawImage(video, 0,0, video.videoWidth, video.videoHeight,
-                            -centerShift_x,centerShift_y,video.videoWidth*ratio*-1, video.videoHeight*ratio);  
+        // let video = document.getElementById('video')
+        // var hRatio = canvasWidth  / video.videoWidth   ;
+        // var vRatio =  canvasHeight / video.videoHeight  ;
+        // var ratio  = Math.max ( hRatio, vRatio );
+        // var centerShift_x = ( canvasWidth - video.videoWidth*ratio ) / 2;
+        // var centerShift_y = ( canvasHeight - video.videoHeight*ratio ) / 2;  
+        // var ctx = cameraSensor.getContext('2d');
+        // ctx.clearRect(0,0,canvasWidth, canvasHeight);
+        // ctx.scale(-1, 1);
+        // console.log(-centerShift_x, centerShift_y)
+        // ctx.drawImage(video, 0,0, video.videoWidth, video.videoHeight,
+        //                     -centerShift_x,centerShift_y,video.videoWidth*ratio*-1, video.videoHeight*ratio);  
 
         var photo = cameraSensor.toDataURL("image/png");
 
@@ -219,31 +225,33 @@
           deepAR.takeScreenshot(); 
           // window.location.href = 'select/'
         })
-
-
-
-        // cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
-        // cameraOutput.src = cameraSensor.toDataURL("image/webp");
-        // cameraOutput.classList.add("taken");
       }
-        let cameraTrigger = document.querySelector("#camera--trigger");
-        let cameraView = document.getElementById('video')
 
-        // cameraTrigger.onclick = function() {
-        //     cameraSensor.width = cameraView.videoWidth;
-        //     cameraSensor.height = cameraView.videoHeight;
-        //     cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
-        //     cameraOutput.src = cameraSensor.toDataURL("image/webp");
-        //     cameraOutput.classList.add("taken");
-        // };
+      var ctx = unedited.getContext('2d');
+      ctx.scale(-1, 1);
 
 
-      let canvas = document.getElementById('deepar-canvas');
-      let video = document.getElementById('video');
-      canvas.width = canvasWidth;
-      canvas.height = canvasHeight;
-      video.width = canvasWidth;
-      video.height = canvasHeight;
+
+      function updateCanvas() {
+        // let video = document.getElementById('video');
+        // let unedited = document.getElementById('camera--sensor');
+        var hRatio = canvasWidth  / video.videoWidth   ;
+        var vRatio =  canvasHeight / video.videoHeight  ;
+        var ratio  = Math.max ( hRatio, vRatio );
+        var centerShift_x = ( canvasWidth - video.videoWidth*ratio ) / 2;
+        var centerShift_y = ( canvasHeight - video.videoHeight*ratio ) / 2;  
+
+        // ctx.clearRect(0,0,canvasWidth, canvasHeight);
+        ctx.drawImage(video, 0,0, video.videoWidth, video.videoHeight,
+                            -centerShift_x,centerShift_y,video.videoWidth*ratio*-1, video.videoHeight*ratio);         
+        // ctx.drawImage(video, 0, 0, canvasWidth, canvasHeight);
+
+        window.requestAnimationFrame(updateCanvas);
+      }
+
+      requestAnimationFrame(updateCanvas);
+
+      
 
       var deepAR = new DeepAR({ 
         licenseKey: '55faac40a80177491dc62380af87cf5cc0e498a7aa7cf61dad455e21edc69dbbc54a35fcbe53cf88',
@@ -341,22 +349,6 @@
         video.loop = true;
         // video.controls = true;
         video.setAttribute('playsinline', 'playsinline');
-        // video.style.width = '100%';
-        // video.style.height = '100%';
-
-        // put it somewhere in the DOM
-        // var videoContainer = document.createElement('div');
-        // videoContainer.appendChild(video);
-        // videoContainer.style.width = '1px';
-        // videoContainer.style.height = '1px';
-        // videoContainer.style.position = 'absolute';
-        // videoContainer.style.top = '0px';
-        // videoContainer.style.left = '0px';
-        // videoContainer.style['z-index'] = '-1';
-        // document.body.appendChild(videoContainer);
-  
-        // videoObjects.videoContainer = videoContainer;
-        // videoObjects.video = video;
           
         navigator.mediaDevices.getUserMedia({video: true}).then(function(stream) {
           try {
