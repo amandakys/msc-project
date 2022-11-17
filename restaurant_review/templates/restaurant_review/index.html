@@ -152,7 +152,7 @@
         </div>
 
         <div class="letter">
-          {% if profile.experiment_one%} 
+          {% if not profile.experiment_one %} 
           <a href="{% url 'deepar' %}">
             <h4>Task (smartphone only)</h4>
           </a>
