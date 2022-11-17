@@ -300,9 +300,10 @@
           'X-CSRFToken': csrftoken,
         },
         body: JSON.stringify({ selection: selected, edited: edited, numEditedSelected: editedSelectedCnt })
+      }).then(()=> {
+        location.href = "{% url 'finished'%}"
       })
 
-      location.href = "{% url 'finished'%}"
     }
 
 

@@ -90,8 +90,9 @@
                     'X-Result': result ? 'True': ''
 
                 }
+            }).then(() => {
+                location.href = "{% url 'complete'%}"
             })
-            location.href = "{% url 'complete'%}"
         }
         function waitAndReload(event) {
     
