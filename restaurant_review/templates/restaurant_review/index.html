@@ -71,6 +71,10 @@
     p {
       margin-bottom: 0
     }
+    .link {
+      color: #0d6efd;
+      text-decoration: underline;
+    }
   </style>
 {% endblock %}
 {% block content %}
@@ -108,8 +112,8 @@
     <div class="wrapper"> 
       <div class="letter">
         
-        <a href="https://redcap.slms.ucl.ac.uk/surveys/?s=9FHN9T3NWDXH4RJW" onclick="hasConsent()">
-          <h4>Consent Form</h4>
+        <a onclick="hasConsent()">
+          <h4 class="link">Consent Form</h4>
         </a>
       </div>
       <div class="letter">
@@ -122,8 +126,8 @@
 
       <div class="wrapper"> 
         <div class="letter">
-          <a href="https://redcap.slms.ucl.ac.uk/surveys/?s=3CAJWJMWXRC799J9" onclick="hasLottery()">
-            <h4 style="padding-right: 1rem; width: max-content">Lottery Signup</h4>
+          <a onclick="hasLottery()">
+            <h4 class="link" style="padding-right: 1rem; width: max-content">Lottery Signup</h4>
           </a>
         </div>
           
@@ -148,7 +152,7 @@
         </div>
 
         <div class="letter">
-          {% if not profile.experiment_one %} 
+          {% if profile.experiment_one%} 
           <a href="{% url 'deepar' %}">
             <h4>Task (smartphone only)</h4>
           </a>
@@ -176,8 +180,8 @@
       <div class="wrapper"> 
         <div class="letter">
           
-          <a href="https://redcap.slms.ucl.ac.uk/surveys/?s=RP8YNRNW9RWAKXFJ" onclick="surveyOne()">
-            <h4>Survey 1</h4>
+          <a onclick="surveyOne()">
+            <h4 class="link">Survey 1</h4>
           </a>
         </div>
         <div class="letter">
@@ -211,8 +215,8 @@
       <div class="wrapper"> 
         <div class="letter">
           
-          <a href="https://redcap.slms.ucl.ac.uk/surveys/?s=3TWCPWE3HPHAY9YT" onclick="surveyTwo()">
-            <h4>Survey 2</h4>
+          <a onclick="surveyTwo()">
+            <h4 class="link">Survey 2</h4>
           </a>
         </div>
         <div class="letter">
@@ -242,7 +246,7 @@
       .then((response) => {
         document.getElementById('consent-checkbox').checked = true;
         document.getElementById('consent-complete-text').innerText = 'Complete';
-
+        location.href = "https://redcap.slms.ucl.ac.uk/surveys/?s=9FHN9T3NWDXH4RJW"
       })
     }
 
@@ -255,6 +259,7 @@
       .then((response) => {
         document.getElementById('lottery-checkbox').checked = true;
         document.getElementById('lottery-complete-text').innerText = 'Complete';
+        location.href = "https://redcap.slms.ucl.ac.uk/surveys/?s=3CAJWJMWXRC799J9"
 
       })
     }
@@ -267,6 +272,7 @@
       .then((response) => {
         document.getElementById('one-checkbox').checked = true;
         document.getElementById('one-complete-text').innerText = 'Complete'
+        location.href = "https://redcap.slms.ucl.ac.uk/surveys/?s=RP8YNRNW9RWAKXFJ"
 
       })
     }
@@ -281,6 +287,7 @@
         document.getElementById('two-complete-text').innerText = 'Complete';
         document.getElementById('debrief').style.display = 'block';
         document.getElementById('comeback').style.display = 'none';
+        location.href="https://redcap.slms.ucl.ac.uk/surveys/?s=3TWCPWE3HPHAY9YT"
 
       })
     }
