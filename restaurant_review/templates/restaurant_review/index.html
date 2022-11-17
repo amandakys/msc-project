@@ -83,7 +83,7 @@
     {% else %}
 
 
-      {% if profile.survey_two_isComplete %}
+      {% if profile.experiment_two %}
       <h1>Thank You!</h1>
       <h3>You're all done</h3>
       <hr>
@@ -205,7 +205,7 @@
           </div>
         </div>
       </div>
-
+      {% if profile.experiment_two %}
       <div class="wrapper"> 
         <div class="letter">
           
@@ -215,11 +215,12 @@
         </div>
         <div class="letter">
           <div class="status">
-            <input type="checkbox" id="two-checkbox" onclick="return false" {% if profile.survey_two_isComplete %} checked {% endif %} />
-            <h6 id="two-complete-text">{% if profile.survey_one_isComplete %} Complete {% else %} Not Complete{% endif %}</h6> 
+            <input type="checkbox" id="two-checkbox" onclick="return false" {% if profile.experiment_two %} checked {% endif %} />
+            <h6 id="two-complete-text">{% if profile.experiment_two %} Complete {% else %} Not Complete{% endif %}</h6> 
           </div>
         </div>
       </div>
+      {% endif %}
 
     </div>
     
