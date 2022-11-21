@@ -42,30 +42,30 @@ class SignUpView(generic.CreateView):
         numUsers = User.objects.count()
         print(numUsers)
         profile = Profile.objects.get(user=user)
-        groupNumber = numUsers%6
+        groupNumber = numUsers%4
 
-  
-        if groupNumber == 0: 
-            print('group 0')
-            profile.isARCamera = False
-            profile.tellIsAR = False
-            profile.showARImage = False
-        elif groupNumber == 1:
-            print('group 1')
-            profile.isARCamera = False
-            profile.tellIsAR = False
-            profile.showARImage = True
-        elif groupNumber == 2:
+        # remove control group
+        # if groupNumber == 0: 
+        #     print('group 0')
+        #     profile.isARCamera = False
+        #     profile.tellIsAR = False
+        #     profile.showARImage = False
+        # elif groupNumber == 1:
+        #     print('group 1')
+        #     profile.isARCamera = False
+        #     profile.tellIsAR = False
+        #     profile.showARImage = True
+        if groupNumber == 0:
             print('group 2')
             profile.isARCamera = True
             profile.tellIsAR = False
             profile.showARImage = False
-        elif groupNumber == 3:
+        elif groupNumber == 1:
             print('group 3')
             profile.isARCamera = True
             profile.tellIsAR = False
             profile.showARImage = True
-        elif groupNumber == 4:
+        elif groupNumber == 2:
             print('group 4')
             profile.isARCamera = True
             profile.tellIsAR = True
