@@ -174,6 +174,14 @@
 
     const photos = [1,2,3,4,5,6]
     const half = photos.length/2; 
+    
+    let selected = [];
+    let edited = [];
+    let imageOrder = [];
+
+    console.log(selected);
+
+    var currentSlide; 
 
     function generateRandomHalf() {
       const options = [...photos];
@@ -208,7 +216,7 @@
       console.log('generate');
       const isEdited = generateRandomHalf();
       edited = isEdited; 
-      const imageOrder = shuffle(photos);
+      imageOrder = shuffle(photos);
       console.log(imageOrder, 'imageOrder')
       console.log(edited, 'edited')
       const carousel = document.getElementById('carousel');
@@ -223,12 +231,6 @@
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
     
-    let selected = [];
-    let edited = [];
-    console.log(selected);
-
-    var currentSlide; 
-
     // var currentSlide = $('.select-carousel').slick('slickCurrentSlide');
     
     function handleClick() {
@@ -281,17 +283,21 @@
     
     function submitSelection() {
       // shift selected indexes up by one
-      selected = selected.map(s => s+1);
-      selected.sort(sortNumArray)
+      // selected = selected.map(s => s+1);
+      // selected.sort(sortNumArray)
+      selectedDays = selected.map(s => imageOrder[s]).sort(sortNumArray)
       edited.sort(sortNumArray)
 
       let editedSelectedCnt = 0;
 
-      selected.forEach((s) => {
+      selectedDays.forEach((s) => {
         if (edited.includes(s)) editedSelectedCnt++;
       })
 
-      console.log(editedSelectedCnt)
+        // console.log(editedSelectedCnt)
+        // console.log(selected, 'selected')
+        // console.log(selectedDays, 'selectedDays')
+        // console.log(edited, 'edited')
 
       fetch('/experimenttwo/select/', {
         method: 'POST',
@@ -299,7 +305,7 @@
           'Content-Type': 'application/json',
           'X-CSRFToken': csrftoken,
         },
-        body: JSON.stringify({ selection: selected, edited: edited, numEditedSelected: editedSelectedCnt })
+        body: JSON.stringify({ selection: selectedDays, edited: edited, numEditedSelected: editedSelectedCnt })
       }).then(()=> {
         location.href = "{% url 'finished'%}"
       })
