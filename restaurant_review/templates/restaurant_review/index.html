@@ -123,24 +123,7 @@
     
         </div>
       </div>
-
-      <div class="wrapper"> 
-        <div class="letter">
-          <a onclick="hasLottery()">
-            <h4 class="link" style="padding-right: 1rem; width: max-content">Lottery Signup</h4>
-          </a>
-        </div>
-          
-        </div>
-        <div class="letter">
-          <div class="status">
-            <input type="checkbox" id="lottery-checkbox" onclick="return false" {% if profile.hasLottery %} checked {% endif %} />
-            <h6 id="lottery-complete-text">{% if profile.hasLottery %} Complete {% else %} Not Complete (optional) {% endif %}</h6> 
-      
-          </div>
-        </div>
-      </div>
-      <p>If you'd like to sign up for the £10 lottery for participating in Experiment 1, please fill out this form</p>
+    </div>
 
       <hr>
       <div class="wrapper"> 
@@ -167,7 +150,25 @@
       
           </div>
         </div>
+
+      <div class="wrapper"> 
+        <div class="letter">
+          <a onclick="hasLottery()">
+            <h4 class="link" style="padding-right: 1rem; width: max-content">Lottery Signup</h4>
+          </a>
+        </div>
+          
+        </div>
+        <div class="letter">
+          <div class="status">
+            <input type="checkbox" id="lottery-checkbox" onclick="return false" {% if profile.hasLottery %} checked {% endif %} />
+            <h6 id="lottery-complete-text">{% if profile.hasLottery %} Complete {% else %} Not Complete (optional) {% endif %}</h6> 
+      
+          </div>
+        </div>
       </div>
+      <p>If you'd like to sign up for the £10 lottery for participating in Experiment 1, please fill out this form</p>
+
 
       <hr>
       <div class="wrapper"> 
